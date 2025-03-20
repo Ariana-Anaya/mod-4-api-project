@@ -6,6 +6,24 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
+      //- User has many Spots through ownerId with cascade delete
+      User.hasMany(models.Spot, {
+        foreignKey: 'ownerId',
+        as: 'Spots',
+        onDelete: 'CASCADE', 
+      });
+      //- User has many Reviews through userId with cascade delete
+      User.hasMany(models.Reviews, {
+        foreignKey: 'userId',
+        as: 'Reviews',
+        onDelete: 'CASCADE', 
+      });
+      //- User has many Bookings through userId with cascade delete
+      User.hasMany(models.Bookings, {
+        foreignKey: 'userId',
+        as: 'Bookings',
+        onDelete: 'CASCADE', 
+      });
     }
   }
 
