@@ -12,18 +12,18 @@ module.exports = (sequelize, DataTypes) => {
         as: 'Spots',
         onDelete: 'CASCADE', 
       });
-      //- User has many Reviews through userId with cascade delete
-      User.hasMany(models.Reviews, {
-        foreignKey: 'userId',
-        as: 'Reviews',
-        onDelete: 'CASCADE', 
-      });
-      //- User has many Bookings through userId with cascade delete
-      User.hasMany(models.Bookings, {
-        foreignKey: 'userId',
-        as: 'Bookings',
-        onDelete: 'CASCADE', 
-      });
+      // //- User has many Reviews through userId with cascade delete
+      // User.hasMany(models.Reviews, {
+      //   foreignKey: 'userId',
+      //   as: 'Reviews',
+      //   onDelete: 'CASCADE', 
+      // });
+      // //- User has many Bookings through userId with cascade delete
+      // User.hasMany(models.Bookings, {
+      //   foreignKey: 'userId',
+      //   as: 'Bookings',
+      //   onDelete: 'CASCADE', 
+      // });
     }
   }
 

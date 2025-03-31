@@ -4,7 +4,7 @@
 const { Model, Validator } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Spot extends Model {
+  class SpotImage extends Model {
    
     static associate(models) {
       // define association here
