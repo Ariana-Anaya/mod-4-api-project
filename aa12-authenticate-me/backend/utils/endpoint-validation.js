@@ -12,7 +12,7 @@ const isLoggedIn = (req, res, next) => {
     next();
 }
 
-const validateSpots = [
+const validateQueryFilters = [
     checkSchema({
         page: {
             optional: true,
@@ -87,23 +87,50 @@ const validateSpots = [
     handleValidationErrors
 ];
 
-const createSpotValidation = [
+const validateSpot = [
     checkSchema({
-        address: { exists: true, errorMessage: `Address is required` },
-        city: { exists: true, errorMessage: `City is required` },
-        state: { exists: true, errorMessage: `State is required` },
-        country: { exists: true, errorMessage: `country is required`},
-        lat: { isFloat: { options: { min: -90, max: 90 } }, errorMessage: `Latitude must be between -90 and 90` },
-        lng: { isFloat: { options: { min: -180, max: 180 } }, errorMessage: `Longitude must be between -180 and 180` },
-        name: { isLength: {options: {min:1, max: 50 } }, errorMessage: `Must have a name less than 50 characters` },
-        description: { exists: true, errorMessage: `Must have a description` },
-        price: { isFloat: { options: { gt: 0 } }, errorMessage: `price per day must be a positive number` }
+        address: {
+            exists: true,
+            errorMessage: `Address is required`
+        },
+        city: {
+            exists: true,
+            errorMessage: `City is required`
+        },
+        state: {
+            exists: true,
+            errorMessage: `State is required`
+        },
+        country: {
+            exists: true,
+            errorMessage: `country is required`
+        },
+        lat: {
+            isFloat: { options: { min: -90, max: 90 } },
+            errorMessage: `Latitude must be between -90 and 90`
+        },
+        lng: {
+            isFloat: { options: { min: -180, max: 180 } },
+            errorMessage: `Longitude must be between -180 and 180`
+        },
+        name: {
+            isLength: {options: {min:1, max: 50 } },
+            errorMessage: `Must have a name less than 50 characters`
+        },
+        description: {
+            exists: true,
+            errorMessage: `Must have a description`
+        },
+        price: {
+            isFloat: { options: { gt: 0 } },
+            errorMessage: `price per day must be a positive number`
+        }
     }),
     handleValidationErrors
 ];
 
 module.exports = {
     isLoggedIn,
-    validateSpots,
-    createSpotValidation
+    validateQueryFilters,
+    validateSpot
 }

@@ -13,8 +13,8 @@ const { check, handleValidationErrors } = require('express-validator');
 const { Op } = require('sequelize');
 const {
   isLoggedIn,
-  validateSpots,
-  createSpotValidation
+  validateQueryFilters,
+  validateSpot
 } = require('../../utils/endpoint-validation');
 
 //2. Create router object
@@ -22,7 +22,7 @@ const router = express.Router();
  
 
 
-router.get('/', validateSpots, async (req, res) => {
+router.get('/', validateQueryFilters, async (req, res) => {
   let { page = 1, size = 20, city, state, country } = req.query;
  
   page = parseInt(page);
@@ -125,7 +125,7 @@ router.get('/:id', async (req, res) => {
   - Format response with proper data types
   - Return 201 status with JSON response*/
 
-router.post('/', requireAuth, validateSpots, async (req, res) => {
+router.post('/', requireAuth, validateQueryFilters, async (req, res) => {
   const { name, description, address, city, state, country, price, lat, lng } = req.body;
 
   const spot = await Spot.create({
@@ -196,7 +196,7 @@ router.post( '/:id/images', requireAuth, async (req, res) => {
   - Format response with proper data types
   - Return JSON response with updated spot*/
 
-router.put('/:id', requireAuth, validateSpots, async (req, res) => {
+router.put('/:id', requireAuth, validateQueryFilters, async (req, res) => {
   const spotId = req.params.id;
   const { name, description, address, city, state, country, price, lat, lng } = req.body;
 
