@@ -240,7 +240,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
 
   const spot = await Spot.findByPk(spotId);
   if (!spot) {
-    return res.status(404).json({ error: 'Spot does not exiat' });
+    return res.status(404).json({ error: 'Spot does not exist' });
   }
 
   if (spot.ownerId !== userId) {
