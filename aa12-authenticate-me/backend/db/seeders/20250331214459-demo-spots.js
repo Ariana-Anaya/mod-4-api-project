@@ -19,7 +19,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await Spot.bulkCreate([
+    await Spot.bulkInsert([
       {
         ownerId: 1,
         address: "123 Disney Lane",
