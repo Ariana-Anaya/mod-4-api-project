@@ -1,6 +1,6 @@
 'use strict';
 const bcrypt = require("bcryptjs");
-const { Spot } = require('../models/');
+const { Spot, User } = require('../models/');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -10,7 +10,8 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
+    const user1 = await User.findOne({ where: { email: 'demo@user.io' } });
+    const user2 = await User.findOne({ where: { email: 'user1@user.io' } });    /**
      * Add seed commands here.
      *
      * Example:
@@ -21,7 +22,7 @@ module.exports = {
     */
     await Spot.bulkCreate([
       {
-        ownerId: 1,
+        ownerId: user1.id,
         address: "123 Disney Lane",
         city: "San Francisco",
         state: "California",
@@ -33,7 +34,7 @@ module.exports = {
         price: 123,
       },
       {
-        ownerId: 1,
+        ownerId: user1.id,
         address: "One N 19th St",
         city: "Philadelphia",
         state: "Pennsylvania",
@@ -45,7 +46,7 @@ module.exports = {
         price: 245,
       },
       {
-        ownerId: 1,
+        ownerId: user1.id,
         address: "310 W Broadway",
         city: "New York",
         state: "New York",
@@ -57,7 +58,7 @@ module.exports = {
         price: 275,
       },
       {
-        ownerId: 1,
+        ownerId: user1.id,
         address: "9641 Sunset Blvd",
         city: "Beverly Hills",
         state: "California",
@@ -69,7 +70,7 @@ module.exports = {
         price: 499,
       },
       {
-        ownerId: 2,
+        ownerId: user2.id,
         address: "1435 Brickell Ave",
         city: "Miami",
         state: "Florida",
@@ -81,7 +82,7 @@ module.exports = {
         price: 868,
       },
       {
-        ownerId: 2,
+        ownerId: user2.id,
         address: "515 15th St NW",
         city: "Washington",
         state: "District of Colombia",
