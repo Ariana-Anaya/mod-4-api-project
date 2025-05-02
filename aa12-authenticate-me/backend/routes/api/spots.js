@@ -9,8 +9,26 @@ const {
     createSpotValidation,
     createReviewValidation
 } = require('../../utils/endpoint-validation');
-const { formatBookingDates, hasNoBookingOverlap } = require('../../utils/booking-dates');
 
+const formatBookingDates = ({ start, end }) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return { startDate, endDate };
+};
+const hasNoBookingOverlap = (pastBookings, startDate, endDate) => {
+    for (let booking of pastBookings) {
+        const existingStart = new Date(booking.startDate);
+        const existingEnd = new Date(booking.endDate);
+        if (
+            (startDate >= existingStart && startDate < existingEnd) ||
+            (endDate > existingStart && endDate <= existingEnd) ||
+            (startDate <= existingStart && endDate >= existingEnd)
+        ) {
+            return false; // there's an overlap
+        }
+    }
+    return true;
+};
 // Get all spots
 router.get('/', allSpotsValidation, async (req, res, next) => {
     const page = req.query.page || 1;
