@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-  const { User, Spot, Booking } = require('../../models');
+  const { User, Spot, Booking } = require('../models');
 
   const demoUsers = await User.findAll({
     where: {
