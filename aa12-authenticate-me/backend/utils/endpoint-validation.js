@@ -1,5 +1,24 @@
-const { checkSchema } = require('express-validator');
+const { checkSchema, query, validationResult } = require('express-validator');
 const { handleValidationErrors } = require('./validation');
+
+const allSpotsValidation = [
+    query('page')
+      .optional()
+      .isInt({ min: 1 }).withMessage('Page must be an integer greater than or equal to 1'),
+    query('size')
+      .optional()
+      .isInt({ min: 1 }).withMessage('Size must be an integer greater than or equal to 1'),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          message: 'Validation error',
+          errors: errors.array()
+        });
+      }
+      next();
+    }
+  ];
 
 const isLoggedIn = (req, res, next) => {
     if (!req.user || req.throwErr) {
@@ -132,5 +151,6 @@ const validateSpot = [
 module.exports = {
     isLoggedIn,
     validateQueryFilters,
-    validateSpot
+    validateSpot,
+    allSpotsValidation
 }
