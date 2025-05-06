@@ -4,7 +4,6 @@ const usersRouter = require('./users.js');
 const spotsRouter = require('./spots.js');
 const reviewsRouter = require('./reviews.js')
 const bookingsRouter = require('./bookings.js');
-const reviewImagesRouter = require('./review-images.js');
 const { restoreUser } = require('../../utils/auth.js');
 
 // Keep this route to test frontend setup in Mod 5
@@ -49,10 +48,7 @@ router.use('/bookings', bookingsRouter);
 router.use('/spots', spotsRouter);
 
 
-router.use('/review-images', reviewImagesRouter);
-router.post('/test', (req, res) => {
-    res.json({ requestBody: req.body });
-  });
+
 
   router.use('/spots', spotsRouter);
 
