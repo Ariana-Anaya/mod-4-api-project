@@ -23,7 +23,7 @@ const allSpotsValidation = [
 const isLoggedIn = (req, res, next) => {
     if (!req.user || req.throwErr) {
         const err = new Error();
-        err.title = `User isn't logged in!`;
+        err.title = `User not logged in`;
         err.message = `Forbidden`;
         err.status = 403;
         next(err);
@@ -148,9 +148,30 @@ const validateSpot = [
     handleValidationErrors
 ];
 
+const createSpotValidation = validateSpot;
+const createReviewValidation = [
+    checkSchema({
+        review: {
+            exists: true,
+            isString: true,
+            notEmpty: true,
+            errorMessage: 'Review missing text'
+        },
+        stars: {
+            isInt: {
+                errorMessage: 'Stars should be between 1 and 5',
+                options: { min: 1, max: 5 }
+            }
+        }
+    }),
+    handleValidationErrors
+];
+
 module.exports = {
     isLoggedIn,
     validateQueryFilters,
     validateSpot,
-    allSpotsValidation
-}
+    allSpotsValidation,
+    createSpotValidation,
+    createReviewValidation
+};
