@@ -49,7 +49,6 @@ router.use('/spots', spotsRouter);
 
 
 
-
   router.use('/spots', spotsRouter);
 
 module.exports = router;
