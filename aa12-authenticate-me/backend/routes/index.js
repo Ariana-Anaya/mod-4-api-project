@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     res.send('Welcome');
 });
 // Add a XSRF-TOKEN cookie
-router.get("/api/csrf/restore", (req, res) => {
+router.get("/csrf/restore", (req, res) => {
     const csrfToken = req.csrfToken();
     res.cookie("XSRF-TOKEN", csrfToken);
     res.status(200).json({
