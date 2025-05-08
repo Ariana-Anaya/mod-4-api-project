@@ -96,13 +96,8 @@ module.exports = {
     ], {});
   },
 
-  async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-    await queryInterface.bulkDelete('Spots', null, {});
+  down: async (queryInterface, Sequelize) => {
+    options.tableName = 'Spots';
+    await queryInterface.bulkDelete(options.tableName, null, {});
   }
 };
