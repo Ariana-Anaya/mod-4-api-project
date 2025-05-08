@@ -58,6 +58,6 @@ await Booking.bulkCreate([
 },
 
 down: async (queryInterface, Sequelize) => {
-await queryInterface.bulkDelete('Bookings', null, {});
+await queryInterface.bulkDelete(options.tableName, null, {});
 }
 };
