@@ -1,5 +1,19 @@
 const { checkSchema, query, validationResult } = require('express-validator');
 const { handleValidationErrors } = require('./validation');
+const {environment} = require('../../config');
+
+function prepareSubqStatement() {
+    const subq = {};
+    if (environment === 'production') {
+        subq.schema = process.env.SCHEMA + ".";
+        subq.statement = (column) => `${subq.schema}"${column}"`;
+    
+    } else {
+        subq.schema = "";
+        subq.statement = (column) => `"${column}"`;
+    }
+    return subq;
+}
 
 const allSpotsValidation = [
     query('page')
