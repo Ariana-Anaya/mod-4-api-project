@@ -1,6 +1,6 @@
 const { checkSchema, query, validationResult } = require('express-validator');
 const { handleValidationErrors } = require('./validation');
-const {environment} = require('../../config');
+const {environment} = require('../config');
 
 function prepareSubqStatement() {
     const subq = {};
