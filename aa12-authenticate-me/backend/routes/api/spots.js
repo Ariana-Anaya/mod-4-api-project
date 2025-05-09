@@ -93,10 +93,10 @@ router.get('/', allSpotsValidation, async (req, res, next) => {
 
 // Get all Spots owned by the current user
 router.get('/current', requireAuth, isLoggedIn, async (req, res, next) => {
-    console.log("Checking the require statement:", require('../../utils/endpoint-validation'));
-
-    console.log("Checking value of prepareSubqStatement:", prepareSubqStatement);
-    const subq = prepareSubqStatement();
+    const importedFunctions = require('../../utils/endpoint-validation');
+    console.log("Contents of imported module:", importedFunctions);
+    console.log("Is prepareSubqStatement present?", 'prepareSubqStatement' in importedFunctions);
+    const subq = mportedFunctions.prepareSubqStatement();
     subq.avgRating = `( 
         SELECT AVG("stars") FROM "${subq.schema}Reviews" AS "Review"
         WHERE
