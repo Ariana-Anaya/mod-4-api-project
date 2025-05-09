@@ -93,6 +93,7 @@ router.get('/', allSpotsValidation, async (req, res, next) => {
 
 // Get all Spots owned by the current user
 router.get('/current', requireAuth, isLoggedIn, async (req, res, next) => {
+    console.log("Checking value of prepareSubqStatement:", prepareSubqStatement);
     const subq = prepareSubqStatement();
     subq.avgRating = `( 
         SELECT AVG("stars") FROM "${subq.schema}Reviews" AS "Review"
