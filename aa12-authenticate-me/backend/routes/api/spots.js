@@ -59,6 +59,9 @@ router.get('/', allSpotsValidation, async (req, res, next) => {
 
     // Use prepared statements to handle SQLite vs PostgreSQL differences
     const subq = prepareSubqStatement();
+    const reviewTable = `"${subq.schema}Reviews"`;
+    const spotImagesTable = `"${subq.schema}SpotImages"`; 
+
     subq.avgRating = `( 
         SELECT AVG("stars") FROM "${subq.schema}Reviews" AS "Review" 
         WHERE "Review"."spotId" = "Spot"."id" 
@@ -97,6 +100,8 @@ router.get('/current', requireAuth, isLoggedIn, async (req, res, next) => {
     console.log("Contents of imported module:", importedFunctions);
     console.log("Is prepareSubqStatement present?", 'prepareSubqStatement' in importedFunctions);
     const subq = importedFunctions.prepareSubqStatement();
+    const reviewTable = `"${subq.schema}Reviews"`;
+    const spotImagesTable = `"${subq.schema}SpotImages"`; 
     subq.avgRating = `( 
         SELECT AVG("stars") FROM "${subq.schema}Reviews" AS "Review"
         WHERE
