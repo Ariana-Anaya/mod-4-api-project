@@ -96,7 +96,7 @@ router.get('/current', requireAuth, isLoggedIn, async (req, res, next) => {
     const importedFunctions = require('../../utils/endpoint-validation');
     console.log("Contents of imported module:", importedFunctions);
     console.log("Is prepareSubqStatement present?", 'prepareSubqStatement' in importedFunctions);
-    const subq = mportedFunctions.prepareSubqStatement();
+    const subq = importedFunctions.prepareSubqStatement();
     subq.avgRating = `( 
         SELECT AVG("stars") FROM "${subq.schema}Reviews" AS "Review"
         WHERE
