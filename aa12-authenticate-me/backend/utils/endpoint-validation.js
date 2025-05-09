@@ -5,8 +5,8 @@ const {environment} = require('../config');
 function prepareSubqStatement() {
     const subq = {};
     if (environment === 'production') {
-        subq.schema = process.env.SCHEMA + ".";
-        subq.statement = (column) => `${subq.schema}"${column}"`;
+        subq.schema = process.env.SCHEMA;
+        subq.statement = (column) => `${subq.schema}."${column}"`;
     
     } else {
         subq.schema = "";
