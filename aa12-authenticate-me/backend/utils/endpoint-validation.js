@@ -187,5 +187,6 @@ module.exports = {
     validateSpot,
     allSpotsValidation,
     createSpotValidation,
-    createReviewValidation
+    createReviewValidation,
+    prepareSubqStatement
 };
