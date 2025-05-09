@@ -62,11 +62,11 @@ router.get('/', allSpotsValidation, async (req, res, next) => {
     const reviewTable = `"${subq.schema}Reviews"`;
     const spotImagesTable = `"${subq.schema}SpotImages"`; 
 
-    subq.avgRating = `( 
+    const avgRatingSubquery = `( 
         SELECT AVG("stars") FROM "${subq.schema}Reviews" AS "Review" 
         WHERE "Review"."spotId" = "Spot"."id" 
     )`;
-    subq.previewImage = `( 
+    const previewImageSubquery = `( 
         SELECT "url" FROM "${subq.schema}SpotImages" AS "SpotImage" 
         WHERE 
             "SpotImage"."spotId" = "Spot"."id" 
@@ -78,8 +78,8 @@ router.get('/', allSpotsValidation, async (req, res, next) => {
     const spots = await models.Spot.findAll({
         attributes: {
             include: [
-                [models.sequelize.literal(subq.statement('avgRating')), 'avgRating'],
-                [models.sequelize.literal(subq.statement('previewImage')), 'previewImage']
+                [models.sequelize.literal(avgRatingSubquery), 'avgRating'],
+                [models.sequelize.literal(previewImageSubquery), 'previewImage']
             ]
         },
         ...pagination, where,
@@ -97,17 +97,15 @@ router.get('/', allSpotsValidation, async (req, res, next) => {
 // Get all Spots owned by the current user
 router.get('/current', requireAuth, isLoggedIn, async (req, res, next) => {
     const importedFunctions = require('../../utils/endpoint-validation');
-    console.log("Contents of imported module:", importedFunctions);
-    console.log("Is prepareSubqStatement present?", 'prepareSubqStatement' in importedFunctions);
     const subq = importedFunctions.prepareSubqStatement();
     const reviewTable = `"${subq.schema}Reviews"`;
-    const spotImagesTable = `"${subq.schema}SpotImages"`; 
-    subq.avgRating = `( 
+    const spotImagesTable = `"${subq.schema}SpotImages"`;
+    const avgRatingSubquery= `( 
         SELECT AVG("stars") FROM "${subq.schema}Reviews" AS "Review"
         WHERE
             "Review"."spotId" = "Spot"."id"
     )`;
-    subq.previewImage = `( 
+    const previewImageSubquery = `( 
         SELECT "url" FROM "${subq.schema}SpotImages" AS "SpotImage"
         WHERE
             "SpotImage"."spotId" = "Spot"."id"
@@ -119,8 +117,8 @@ router.get('/current', requireAuth, isLoggedIn, async (req, res, next) => {
         where: { ownerId: req.user.id },
         attributes: {
             include: [
-                [models.sequelize.literal(subq.statement('avgRating')), 'avgRating'],
-                [models.sequelize.literal(subq.statement('previewImage')), 'previewImage']
+                [models.sequelize.literal(avgRatingSubquery), 'avgRating'],
+                [models.sequelize.literal(previewImageSubquery), 'previewImage']
             ]
         }
     });
