@@ -8,16 +8,21 @@ if (process.env.NODE_ENV === "production") {
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn(options, "ownerId", {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: { model: "Users" },
-      onDelete: "CASCADE",
-    });
+  async up (queryInterface, Sequelize) {
+    const tableInfo = await queryInterface.describeTable('Spots');
+    if (!tableInfo.ownerId) {
+      await queryInterface.addColumn('Spots', 'ownerId', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+    }
   },
-
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn(options, "ownerId");
+    await queryInterface.removeColumn("Spots", "ownerId");
   },
 };
