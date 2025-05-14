@@ -1,29 +1,30 @@
 'use strict';
 let options = {};
+options.tableName = "Bookings";
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ReviewImages', {
+    await queryInterface.createTable(
+      "Bookings",
+      {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      reviewId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Reviews',
-          key: 'id'
-        },
-        onDelete: 'CASCADE'
+      
+      startDate: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
       },
-      url: {
-        allowNull: false,
-        type: Sequelize.STRING
+      endDate: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -35,9 +36,12 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    }, options);
+    },
+  options
+);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ReviewImages', options);
-  }
+    options.tableName - "Bookings";
+    return queryInterface.dropTable(options);
+  },
 };

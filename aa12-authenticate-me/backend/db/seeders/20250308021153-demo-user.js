@@ -8,42 +8,84 @@ if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
 
+const seedData = [
+  {
+    email: "demo@user.io",
+    username: "Demo-lition",
+    firstName: "Demo",
+    lastName: "Lition",
+    hashedPassword: bcrypt.hashSync("password"),
+  },
+  {
+    email: "user1@user.io",
+    username: "FakeUser1",
+    firstName: "Ariana",
+    lastName: "Anaya",
+    hashedPassword: bcrypt.hashSync("password2"),
+  },
+  {
+    email: "user2@user.io",
+    username: "FakeUser2",
+    firstName: "Zack",
+    lastName: "Haley",
+    hashedPassword: bcrypt.hashSync("password3"),
+  },
+  {
+    email: "ariana@user.io",
+    username: "ariana2395",
+    firstName: "Ari",
+    lastName: "Ana",
+    hashedPassword: bcrypt.hashSync("password4"),
+  },
+  {
+    email: "squirrel@gmail.com",
+    username: "squirrelgirl",
+    firstName: "Doreen",
+    lastName: "Grey",
+    hashedPassword: bcrypt.hashSync("stampede1"),
+  },
+  {
+    email: "Daniel@hotmail.com",
+    username: "Laniel",
+    firstName: "Daniel",
+    lastName: "Lan",
+    hashedPassword: bcrypt.hashSync("rocketleague4"),
+  },
+  {
+    email: "Tony@wiseguy.com",
+    username: "TonySop",
+    firstName: "Tony",
+    lastName: "Soprano",
+    hashedPassword: bcrypt.hashSync("gabagool99"),
+  },
+  {
+    email: "Larry@gmail.com",
+    username: "SeinfeldLover",
+    firstName: "Larry",
+    lastName: "David",
+    hashedPassword: bcrypt.hashSync("festivus22"),
+  },
+]
+
+
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    options.tableName = 'Users';
-    await queryInterface.bulkInsert(options, [
-      {
-        email: 'demo@user.io',
-        username: 'Demo-lition',
-        hashedPassword: bcrypt.hashSync('password'),
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        email: 'user1@user.io',
-        username: 'FakeUser1',
-        hashedPassword: bcrypt.hashSync('password2'),
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        email: 'user2@user.io',
-        username: 'FakeUser2',
-        hashedPassword: bcrypt.hashSync('password3'),
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ], { 
-      validate: true,
-      schema: process.env.SCHEMA
-     });
+  async up(queryInterface, Sequelize) {
+    await User.bulkCreate(seedData, { validate: true });
   },
 
-  async down (queryInterface, Sequelize) {
-    options.tableName = 'Users';
+  async down(queryInterface, Sequelize) {
+    options.tableName = "Users";
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['Demo-lition', 'FakeUser1', 'FakeUser2'] }
-    }, { schema: process.env.SCHEMA });
-  }
+    return queryInterface.bulkDelete(
+      options,
+      {
+        username: {
+          [Op.in]: seedData.map((user) => {
+            return user.username;
+          }),
+        },
+      },
+      {}
+    );
+  },
 };
