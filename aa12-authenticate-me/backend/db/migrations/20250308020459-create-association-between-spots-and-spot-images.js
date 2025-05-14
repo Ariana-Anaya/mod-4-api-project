@@ -11,7 +11,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const tableInfo = await queryInterface.describeTable({
       tableName: 'SpotImages',
-      schema: options.schema // Ensure 'options' is defined and has the schema
+      schema: options.schema 
     });
     if (!tableInfo.spotId) {
       await queryInterface.addColumn('SpotImages', 'spotId', {

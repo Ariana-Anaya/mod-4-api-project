@@ -9,24 +9,41 @@ if (process.env.NODE_ENV === "production") {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn(options, "userId", {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: { model: "Users" },
-      onDelete: "CASCADE",
+    const tableInfo = await queryInterface.describeTable({
+      tableName: options.tableName,
+      schema: options.schema,
     });
 
-    await queryInterface.addColumn(options, "spotId", {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: { model: "Spots" },
-      onDelete: "CASCADE",
-    });
+    if (!tableInfo.userId) {
+      await queryInterface.addColumn(options, "userId", {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Users" },
+        onDelete: "CASCADE",
+      });
+    }
+
+    if (!tableInfo.spotId) {
+      await queryInterface.addColumn(options, "spotId", {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Spots" },
+        onDelete: "CASCADE",
+      });
+    }
   },
 
   async down(queryInterface, Sequelize) {
     options.tableName = "Reviews";
-    await queryInterface.removeColumn(options, "userId");
-    await queryInterface.removeColumn(options, "spotId");
+    const tableInfo = await queryInterface.describeTable({
+      tableName: options.tableName,
+      schema: options.schema,
+    });
+    if (tableInfo.userId) {
+      await queryInterface.removeColumn(options, "userId");
+    }
+    if (tableInfo.spotId) {
+      await queryInterface.removeColumn(options, "spotId");
+    }
   },
 };

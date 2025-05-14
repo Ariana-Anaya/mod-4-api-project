@@ -9,15 +9,28 @@ if (process.env.NODE_ENV === "production") {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn(options, "reviewId", {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: { model: "Reviews" },
-      onDelete: "CASCADE",
+    const tableInfo = await queryInterface.describeTable({
+      tableName: options.tableName,
+      schema: options.schema,
     });
+
+    if (!tableInfo.reviewId) {
+      await queryInterface.addColumn(options, "reviewId", {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Reviews" },
+        onDelete: "CASCADE",
+      });
+    }
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn(options, "reviewId");
+    const tableInfo = await queryInterface.describeTable({
+      tableName: options.tableName,
+      schema: options.schema,
+    });
+    if (tableInfo.reviewId) {
+      await queryInterface.removeColumn(options, "reviewId");
+    }
   },
 };
