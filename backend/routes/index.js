@@ -16,6 +16,8 @@ if (process.env.NODE_ENV === 'production') {
     );
   });
 
+  
+
   // Serve the static assets in the frontend's build folder
   router.use(express.static(path.resolve("../frontend/dist")));
 
@@ -38,5 +40,9 @@ if (process.env.NODE_ENV !== 'production') {
     });
   });
 }
+
+// router.post('/api/test', (req, res) => {
+//   res.json({ requestBody: req.body  });
+// });
 
 module.exports = router;
