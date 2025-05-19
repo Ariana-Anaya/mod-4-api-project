@@ -1,0 +1,11 @@
+.error-text {
+  color: var(--red);
+}
+
+.inline-error {
+  margin-left: 8px;
+}
+
+.below-line-error {
+  margin-top: 4px;
+}

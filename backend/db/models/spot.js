@@ -1,140 +1,106 @@
-// backend/db/models/spot.js
-'use strict';
-
-const { Model, Validator } = require('sequelize');
-
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
-
     static associate(models) {
-      // define association here
-     //Spot belongs to User through ownerId (as Owner)
-     Spot.belongsTo(models.User, {
-      foreignKey: 'ownerId',
-      as: 'Owner',
-    });
+      Spot.belongsTo(models.User, {
+        foreignKey: "ownerId",
+      });
 
-    // - Spot has many SpotImages through spotId
-    Spot.hasMany(models.SpotImage, {
-      foreignKey: 'spotId',
-      as: 'SpotImages',
-    });
+      Spot.hasMany(models.SpotImage, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
 
-    // //-Spot has many Reviews through spotId
-    // Spot.hasMany(models.Review, {
-    //   foreignKey: 'spotId',
-    //   as: 'Reviews',
-    // });
+      Spot.hasMany(models.Booking, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
 
-    // // Spot has many Bookings through spotId
-    // Spot.hasMany(models.Booking, {
-    //   foreignKey: 'spotId',
-    //   as: 'Bookings',
-    // });
+      Spot.hasMany(models.Review, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
+    }
   }
-}
-
-  Spot.init({
-    ownerId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-      
-    address: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Adress cannot be empty',
+  Spot.init(
+    {
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: "unique-address",
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: "unique-address",
+      },
+      state: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: "unique-address",
+      },
+      country: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: "unique-address",
+      },
+      lat: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+          withinRange(val) {
+            if (typeof val !== "number" || val < -90 || val > 90) {
+              throw new Error("Latitude must be within -90 and 90");
+            }
+          },
+        },
+      },
+      lng: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+          withinRange(val) {
+            if (typeof val !== "number" || val < -180 || val > 180) {
+              throw new Error("Longitude must be within -180 and 180");
+            }
+          },
+        },
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+          min: 0,
+          isNumber(val) {
+            if (typeof val !== "number" || val < 0) {
+              throw new Error("Price per day must be a positive number");
+            }
+          },
         },
       },
     },
-    city: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'City cannot be empty',
+    {
+      indexes: [
+        {
+          unique: true,
+          name: "unique-address",
+          fields: ["address", "city", "state", "country"],
         },
-      },
-    },
-    state: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'State cannot be empty',
-        },
-      },
-    },
-    country: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Country cannot be empty',
-        },
-      },
-    },
-    lat: {
-      type: DataTypes.DECIMAL(9,6),
-      allowNull: false,
-      validate: {
-        min: -90,
-        max: 90,
-        isDecimal: {
-          msg: 'Lattitude must be valid decimal',
-        },
-      },
-    },
-    lng: {
-      type: DataTypes.DECIMAL(9,6),
-      allowNull: false,
-      validate: {
-        min: -180,
-        max: 180,
-        isDecimal: {
-          msg: 'Longitude must be valid decimal',
-        },
-      },
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [1, 50],
-        notEmpty: {
-          msg: 'Name cannot be empty',
-        },
-      },
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Description cannot be empty',
-        },
-      },
-    },
-    price: {
-      type: DataTypes.DECIMAL(6,2),
-      allowNull: false,
-      validate: {
-        min: 1,
-        isDecimal: {
-          msg: 'Price must be valid decimal',
-        },
-      },
-    },
-  }, {
-    sequelize,
-      modelName: 'Spot',
-      defaultScope: {
-        attributes: {
-          exclude: ['createdAt', 'updatedAt'],
-        },
-      },
+      ],
+      sequelize,
+      modelName: "Spot",
     }
   );
   return Spot;

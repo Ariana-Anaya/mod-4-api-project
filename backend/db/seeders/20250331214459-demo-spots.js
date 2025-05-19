@@ -1,3 +1,11 @@
+"use strict";
+
+const { Spot } = require("../models");
+
+let options = {};
+if (process.env.NODE_ENV === "production") {
+  options.schema = process.env.SCHEMA; // define your schema in options object
+}
 const spotsData = [
   {
     ownerId: 1,
@@ -86,7 +94,7 @@ const spotsData = [
     price: 320,
   },
   {
-    ownerId: 9,
+    ownerId: 8,
     address: "213 Firefly Lane",
     city: "Seattle",
     state: "Washington",
@@ -102,10 +110,12 @@ const spotsData = [
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+
     await Spot.bulkCreate(spotsData, { validate: true });
   },
 
   async down(queryInterface, Sequelize) {
+    
     options.tableName = "Spots";
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(

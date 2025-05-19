@@ -1,20 +1,33 @@
-import { useModal } from '../../context/Modal';
+import { useModal } from "../../context/Modal";
 
-function OpenModalButton({
+const OpenModalButton = ({
+  elementName, // type of element to render
   modalComponent, // component to render inside the modal
-  buttonText, // text of the button that opens the modal
+  controllerText, // text of the modal operator that opens the modal
   onButtonClick, // optional: callback function that will be called once the button that opens the modal is clicked
-  onModalClose // optional: callback function that will be called once the modal is closed
-}) {
+  onModalClose, // optional: callback function that will be called once the modal is closed
+  customClasses,
+}) => {
   const { setModalContent, setOnModalClose } = useModal();
-
   const onClick = () => {
     if (onModalClose) setOnModalClose(onModalClose);
     setModalContent(modalComponent);
     if (typeof onButtonClick === "function") onButtonClick();
   };
 
-  return <button onClick={onClick}>{buttonText}</button>;
-}
+  return (
+    <>
+      {elementName === "li" ? (
+        <li className={customClasses} onClick={onClick}>
+          {controllerText}
+        </li>
+      ) : elementName === "button" ? (
+        <button className={customClasses} onClick={onClick}>
+          {controllerText}
+        </button>
+      ) : null}
+    </>
+  );
+};
 
 export default OpenModalButton;

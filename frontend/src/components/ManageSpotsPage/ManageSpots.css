@@ -1,0 +1,55 @@
+.manage-spots-page.spots-container.grid-container {
+  column-gap: 0.8vw;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 50px 0;
+  row-gap: 20px;
+}
+
+.manage-spots-page.spots-container.grid-container > .manage-spot-tile {
+  margin: auto;
+  width: 21.3vw;
+}
+
+.manage-spots-page.spots-container.grid-container
+  > .manage-spot-tile
+  .spot-tile {
+  max-width: none;
+}
+
+@media screen and (max-width: 840px) {
+  .manage-spots-page.spots-container.grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .manage-spots-page.spots-container.grid-container > .manage-spot-tile {
+    width: 28.5vw;
+  }
+}
+
+@media screen and (max-width: 675px) {
+  .manage-spots-page.spots-container.grid-container {
+    grid-gap: 2vw;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .manage-spots-page.spots-container.grid-container > .manage-spot-tile {
+    width: 42.5vw;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .manage-spots-page.spots-container.grid-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .manage-spots-page.spots-container.grid-container > .manage-spot-tile {
+    max-width: var(--mobile-modal-max-width);
+    width: var(--main-container-width);
+  }
+}
+
+.no-spots-yet-button.full-width-button.active-button {
+  background-color: var(--green);
+  margin: 50px 0;
+  width: 45%;
+}

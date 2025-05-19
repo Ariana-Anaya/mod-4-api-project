@@ -1,0 +1,12 @@
+.delete-confirmation-text {
+  font-size: 1.5rem;
+}
+
+.delete-modal-button-row {
+  gap: 2vw;
+  margin-top: 20px;
+}
+
+.delete-modal-button.small-button.active-button {
+  padding: 10px 15px;
+}

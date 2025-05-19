@@ -1,47 +1,29 @@
-// backend/db/models/spotimage.js
-'use strict';
-
-const { Model, Validator } = require('sequelize');
-
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class SpotImage extends Model {
-   
     static associate(models) {
-      // define association here
-      //   - SpotImage belongs to Spot through spotId
       SpotImage.belongsTo(models.Spot, {
-        foreignKey: 'spotId',
-        as: 'Spot',
+        foreignKey: "spotId",
       });
     }
   }
-  SpotImage.init({
-    spotId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    url: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        isUrl: {
-          msg: 'Must be in Url format',
-        }
-      }
-    },
-    preview: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-  }, 
-}, {
-    sequelize,
-    modelName: 'SpotImage',
-    defaultScope: {
-      attributes: {
-        exclude: ['createdAt', 'updatedAt'],
+  SpotImage.init(
+    {
+      url: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      preview: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
-  }
-);
+    {
+      sequelize,
+      modelName: "SpotImage",
+    }
+  );
   return SpotImage;
 };

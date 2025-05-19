@@ -1,25 +1,29 @@
-const express = require("express");
+// backend/routes/api/index.js
+const router = require("express").Router();
+const sessionRouter = require("./session.js");
+const usersRouter = require("./users.js");
+const spotsRouter = require("./spots.js");
+const reviewsRouter = require("./reviews.js");
+const spotImagesRouter = require("./spot-images.js");
+const reviewImagesRouter = require("./review-images.js");
+const bookingsRouter = require("./bookings.js"); 
+const { restoreUser } = require("../../utils/auth.js");
 
-const { requireAuth, reviewImageAuthorization } = require("../../utils/auth");
 
-const { ReviewImage } = require("../../db/models");
+router.use(restoreUser);
 
-const router = express.Router();
+router.use("/session", sessionRouter);
 
-// delete an existing image for a review at route: /api/review-images/:imageId
-router.delete(
-  "/:imageId",
-  requireAuth,
-  reviewImageAuthorization,
-  async (req, res) => {
-    let { imageId } = req.params;
+router.use("/users", usersRouter);
 
-    await ReviewImage.destroy({
-      where: { id: imageId },
-    });
+router.use("/spots", spotsRouter);
 
-    return res.status(200).json({ message: "Successfully deleted" });
-  }
-);
+router.use("/reviews", reviewsRouter);
+
+router.use("/spot-images", spotImagesRouter);
+
+router.use("/review-images", reviewImagesRouter);
+
+router.use("/bookings", bookingsRouter); 
 
 module.exports = router;

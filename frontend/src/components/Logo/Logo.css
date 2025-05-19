@@ -1,0 +1,21 @@
+.logo-container,
+.icon-container {
+  align-items: center;
+}
+
+.logo-container {
+  color: var(--green);
+  font-size: 40px;
+  gap: 5px;
+  width: fit-content;
+}
+
+.logo-text {
+  font-family: "Londrina Sketch", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.brown-logo-text {
+  color: var(--brown);
+}

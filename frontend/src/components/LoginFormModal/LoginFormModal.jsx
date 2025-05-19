@@ -1,57 +1,90 @@
-import { useState } from 'react';
-import * as sessionActions from '../../store/session';
-import { useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
+import { useState, useEffect } from "react";
+import { login } from "../../store/session";
+import { useDispatch } from "react-redux";
+import { useModal } from "../../context/Modal";
+import FormField from "../FormField";
+import ErrorText from "../ErrorText";
+import "./LoginFormModal.css";
 
-function LoginFormModal() {
-  const dispatch = useDispatch();
+const LoginFormModal = () => {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [userErrors, setUserErrors] = useState({});
+  const [submitDisabled, setSubmitDisabled] = useState();
+  const dispatch = useDispatch();
   const { closeModal } = useModal();
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    setSubmitDisabled(credential.length < 4 || password.length < 6);
+  }, [credential, password]); // anytime these values changes, the useEffect hook should run
+
+  const logUserIn = async (userDetails) => {
+    const response = await dispatch(login(userDetails));
+    if (response.message) {
+      setUserErrors(response);
+    } else {
+      // if we successfully logged in, close the modal
+      closeModal();
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
-    return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
-      });
+    const userLoginInfo = {
+      credential,
+      password,
+    };
+    logUserIn(userLoginInfo);
   };
 
   return (
-    <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+    <div className="login-modal modal-container">
+      <h2 className="login-header">Log In</h2>
+      {userErrors.message && (
+        <div className="server-errors-container">
+          <ErrorText text="The provided credentials were invalid" />
+        </div>
+      )}
+      <form
+        className="form-container flex-container col"
+        onSubmit={handleSubmit}
+      >
+        <FormField
+          inputId="credential"
+          setInputVal={setCredential}
+          inputVal={credential}
+          inputType="text"
+          labelText="Username or email"
+        />
+
+        <FormField
+          inputId="password"
+          setInputVal={setPassword}
+          inputVal={password}
+          inputType="password"
+          labelText="Password"
+        />
+
+        <button
+          className={`full-width-button ${
+            !submitDisabled ? " active-button" : ""
+          }`}
+          disabled={submitDisabled}
+          type="submit"
+        >
+          Login
+        </button>
       </form>
-    </>
+      <p
+        onClick={() => {
+          logUserIn({ credential: "Demo-lition", password: "password" });
+        }}
+        className="demo-user"
+      >
+        Demo User
+      </p>
+    </div>
   );
-}
+};
 
 export default LoginFormModal;

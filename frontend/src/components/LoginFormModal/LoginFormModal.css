@@ -1,11 +1,13 @@
-form {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    margin: 0 auto;
-  }
-  
-  input {
-    margin-bottom: 10px;
-  }
-  
+.login-header {
+  font-size: clamp(1.25rem, 3.125vw, 2rem);
+}
+
+.demo-user {
+  color: var(--green);
+  margin-top: 20px;
+  text-decoration: underline;
+}
+
+.demo-user:hover {
+  cursor: pointer;
+}

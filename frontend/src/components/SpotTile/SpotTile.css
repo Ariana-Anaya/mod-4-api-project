@@ -1,0 +1,58 @@
+.spot-tile {
+  background-color: var(--white);
+  border-radius: 8px;
+  gap: 7px;
+  max-width: 230px;
+  position: relative;
+}
+
+.spot-details {
+  padding: 4px 3% 8px;
+}
+
+.spot-tooltip {
+  background: burlywood;
+  clip-path: polygon(
+    0% 25%,
+    45% 25%,
+    50% 15%,
+    55% 25%,
+    100% 25%,
+    100% 75%,
+    0% 75%
+  );
+  display: none;
+  font-size: 1rem;
+  left: 10%;
+  padding: 0.5em 0.2em;
+  position: absolute;
+  text-align: center;
+  top: 40%;
+  width: max-content;
+  z-index: 999;
+}
+
+.spot-tile:hover {
+  cursor: pointer;
+}
+
+.spot-tile:hover .spot-tooltip {
+  display: block;
+}
+
+.spot-preview-image {
+  border: 1px solid var(--dark-brown);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  height: 210px;
+  width: 100%;
+}
+
+.location-and-rating {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spot-tile-spot-location {
+  width: 65%;
+}

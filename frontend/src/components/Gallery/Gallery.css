@@ -1,0 +1,31 @@
+.gallery {
+  /* height: 44vw; since the width will be 88% of the vw and we want a rectangle */
+  height: calc(
+    var(--main-container-width) / 2
+  ); /* since the width will be 88% of the vw and we want a rectangle */
+  max-height: 500px;
+  width: 100%; /* this will be 88% of the viewport */
+}
+
+.gallery-featured,
+.additional-image-grid {
+  width: 50%;
+}
+
+.additional-image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.additional-image {
+  height: calc(
+    var(--main-container-width) / 4
+  ); /* half the height of .gallery */
+  max-height: 250px;
+  width: 100%;
+}
+
+.gallery-featured,
+.additional-image {
+  border: 1px solid var(--dark-brown);
+}
