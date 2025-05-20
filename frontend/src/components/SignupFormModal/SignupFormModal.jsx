@@ -63,7 +63,7 @@ const SignupFormModal = () => {
     }
 
     const response = await dispatch(
-      sessionActions.signupUserThunk({
+      sessionActions.signup({
         email,
         username,
         firstName,
