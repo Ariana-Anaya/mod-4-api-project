@@ -1,5 +1,5 @@
 .spot-tile {
-  background-color: var(--white);
+  background-color: #E4D9CC;
   border-radius: 8px;
   gap: 7px;
   max-width: 230px;
@@ -11,7 +11,7 @@
 }
 
 .spot-tooltip {
-  background: burlywood;
+  background: #A3B18A;
   clip-path: polygon(
     0% 25%,
     45% 25%,

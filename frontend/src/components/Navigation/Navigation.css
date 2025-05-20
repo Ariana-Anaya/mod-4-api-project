@@ -2,11 +2,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #3b2f2f; 
+    background-color: #3C3F3B; 
     padding: 10px 20px;
     height: 75px;
     color: white;
-    border-bottom: 2px solid #a38c75;
+    border-bottom: 2px solid #3C3F3B;
   }
   
   .nav-list-container {
@@ -55,7 +55,7 @@
     position: absolute;
     top: 75px; 
     right: 20px;
-    background-color: #3b2f2f;
+    background-color: #3C3F3B;
     border-radius: 8px;
     padding: 10px;
     list-style: none;
@@ -77,7 +77,7 @@
   }
   
   .profile-dropdown li:hover {
-    background-color: #a38c75;
+    background-color: #3C3F3B;
   }
   
   .profile-dropdown.hidden {
@@ -85,13 +85,13 @@
   }
   
   .create-spot {
-    background-color: #28a745; 
+    background-color: #3C3F3B; 
     padding: 8px 12px;
     border-radius: 4px;
     color: white;
   }
   
   .create-spot:hover {
-    background-color: #1c7430; 
+    background-color: #A3B18A; 
   }
   
