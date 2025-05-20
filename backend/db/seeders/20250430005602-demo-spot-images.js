@@ -1,6 +1,10 @@
 "use strict";
 
 const { SpotImage } = require("../models");
+let options = {};
+if (process.env.NODE_ENV === "production") {
+  options.schema = process.env.SCHEMA; // define your schema in options object
+}
 
 const spotImageData = [
   {
@@ -156,7 +160,7 @@ const spotImageData = [
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await SpotImage.bulkCreate(spotImageData, { validate: true });
+    await SpotImage.bulkCreate(spotImageData, { validate: true, ...options }); 
   },
 
   async down(queryInterface, Sequelize) {
