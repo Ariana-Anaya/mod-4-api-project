@@ -8,7 +8,7 @@
     "start": "per-env",
     "start:development": "nodemon ./bin/www",
     "start:production": "npx sequelize-cli db:migrate && node psql-setup-script.js && npx sequelize-cli db:seed:all && node ./bin/www",
-    "build": "node psql-setup-script.js"
+"build": "npx sequelize-cli db:migrate && node psql-setup-script.js && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
