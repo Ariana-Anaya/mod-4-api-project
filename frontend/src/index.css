@@ -185,7 +185,7 @@
   
   .full-width-button.active-button,
   .small-button.active-button {
-    background-color: var(--red);
+    background-color: #7A8F5A;
     border-color: var(--black);
     box-shadow: 2px 2px var(--black);
     color: var(--white);
