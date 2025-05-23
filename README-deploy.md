@@ -152,7 +152,7 @@ Start by giving your application a name. This is the name that will be included
 in the URL of the deployed site, so make sure it is clear and simple. The name
 should be entered in kebab-case. The words "Airbnb", "Meetup", and "Clone"
 ***MUST NOT BE INCLUDED*** in the name. If you submit your project with any of
-those words in the URL, you'll be asked to recreate your Render instance.
+those words in the URL, yofu'll be asked to recreate your Render instance.
 
 Leave the root directory field blank. By default, Render will run commands from
 the root directory.
