@@ -65,6 +65,21 @@ const seedData = [
     lastName: "David",
     hashedPassword: bcrypt.hashSync("festivus22"),
   },
+  {
+    email: "simpson@gmail.com",
+    username: "ElBarto",
+    firstName: "Bart",
+    lastName: "Simpson",
+    hashedPassword: bcrypt.hashSync("Simpson22"),
+  },
+  {
+    email: "Kramer@gmail.com",
+    username: "Kramer",
+    firstName: "Cosmo",
+    lastName: "Kramer",
+    hashedPassword: bcrypt.hashSync("Kman1234"),
+  },
+  
 ]
 
 
