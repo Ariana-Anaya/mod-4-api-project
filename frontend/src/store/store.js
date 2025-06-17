@@ -1,17 +1,14 @@
-// frontend/src/store/store.js
 
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { thunk } from 'redux-thunk';
 import sessionReducer from './session';
 import spotsReducer from './spots';
 import reviewsReducer from './review';
-// Create a rootReducer that calls combineReducers
 const rootReducer = combineReducers({
   session: sessionReducer,
   spots:spotsReducer,
   reviews:reviewsReducer
 });
-// Initialize an enhancer variable 
 let enhancer;
 if (import.meta.env.MODE === 'production') {
   enhancer = applyMiddleware(thunk);
