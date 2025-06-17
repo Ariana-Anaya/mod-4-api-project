@@ -1,355 +1,221 @@
+// frontend/src/store/spots.js
+
 import { csrfFetch } from "./csrf";
-import sortByMostRecent from "./sortResources";
 
-const GET_ALL_SPOTS = "spots/getAllSpots";
-const GET_SPOT_DETAILS = "spots/getSpotDetails";
-const GET_ALL_SPOTS_BY_USER = "spots/getAllSpotsByUser";
-const ADD_NEW_SPOT = "spots/addNewSpot";
-const EDIT_A_SPOT = "spots/editASpot";
-const DELETE_A_SPOT = "spots/deleteASpot";
-const DELETE_SPOT_IMAGE = "spots/deleteSpotImage";
-const ADD_SPOT_IMAGE = "spots/addSpotImage";
+const GET_SPOTS = 'spots/Get_SPOTS';
+const LOAD_SPOT = 'spots/LOAD_SPOT';
+const CREATE_SPOT = 'spots/CREATE_SPOT';
+const UPDATE_SPOT = 'spots/UPDATE_SPOT';
+const DELETE_SPOT = 'spots/DELETE_SPOT';
+const GET_OWNED_SPOTS = 'spots/GET_OWNED_SPOTS';
+//Action Creator 
 
-export const getAllSpots = (spotsArr) => {
+const getAllSpots = (spots) => {
+    return {
+    type: GET_SPOTS,
+    payload: spots
+};
+};
+
+const loadSpotAction = (spot) => {
+    return {
+    type: LOAD_SPOT,
+    payload: spot
+};
+};
+const createSpotAction = (spot) => {
+    return {
+        type: CREATE_SPOT,
+        payload: spot
+
+    };
+};
+const getOwnedSpotsAction = (spots) =>{
+  return{
+    type:GET_OWNED_SPOTS,
+    payload:spots
+  }
+}
+const updateSpotAction = (spot) => {
   return {
-    type: GET_ALL_SPOTS,
-    spotsArr,
+      type: UPDATE_SPOT,
+      payload: spot
   };
 };
 
-export const getSpotDetails = (spotDetails) => {
+const deleteSpotAction = (spotId) => {
   return {
-    type: GET_SPOT_DETAILS,
-    spotDetails,
+      type: DELETE_SPOT,
+      payload: spotId
   };
 };
 
-export const getAllSpotsByUser = (spotsArr) => {
-  return {
-    type: GET_ALL_SPOTS_BY_USER,
-    spotsArr,
+// Thunks
+// Fetch all spots
+export const getSpotsThunk = () => async (dispatch) => {
+    const response = await csrfFetch('/api/spots');
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(getAllSpots(data.Spots));
+    }
   };
-};
-
-export const addNewSpot = (newSpot) => {
-  return {
-    type: ADD_NEW_SPOT,
-    newSpot,
-  };
-};
-
-export const editASpot = (updatedSpot) => {
-  return {
-    type: EDIT_A_SPOT,
-    updatedSpot,
-  };
-};
-
-export const deleteASpot = (deletedSpotId) => {
-  return {
-    type: DELETE_A_SPOT,
-    deletedSpotId,
-  };
-};
-
-export const deleteSpotImage = (spotId, deletedImage) => {
-  return {
-    type: DELETE_SPOT_IMAGE,
-    imageData: { spotId, deletedImage },
-  };
-};
-
-export const addSpotImage = (spotId, newImage) => {
-  return {
-    type: ADD_SPOT_IMAGE,
-    imageData: { spotId, newImage },
-  };
-};
-
-export const getAllSpotsThunk = () => async (dispatch) => {
-  const response = await csrfFetch("/api/spots");
-  const parsedResponse = await response.json();
-  const spots = parsedResponse.Spots;
-  dispatch(getAllSpots(spots));
-};
-
-export const getSpotDetailsThunk = (spotId) => async (dispatch) => {
-  try {
+  
+  // Fetch a single spot (spotdetails) by ID
+  export const getSpotByIdThunk = (spotId) => async (dispatch) => {
     const response = await csrfFetch(`/api/spots/${spotId}`);
-    const spotDetails = await response.json();
-    dispatch(getSpotDetails(spotDetails));
-    return spotDetails;
-  } catch (response) {
-    const parsedError = await response.json();
-    return parsedError;
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(loadSpotAction(data));
+    }
+  };
+  // Fetch all spots for a specific user
+export const getUserSpotsThunk = () => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/current`);
+  console.log(response)
+  if (response.ok) {
+      const data = await response.json();
+      dispatch(getOwnedSpotsAction(data.Spotss));
+      return response;
+     // dispatch(getAllSpots(data.Spots)); // Dispatching the action to update the store with user-specific spots
   }
 };
 
-export const getAllSpotsByUserThunk = () => async (dispatch) => {
-  const response = await csrfFetch("/api/spots/current");
-  const parsedResponse = await response.json();
-  const spots = parsedResponse.Spots;
 
-  dispatch(getAllSpotsByUser(spots));
-
-  return spots;
-};
-
-export const createNewSpotThunk = (spotDetails) => async (dispatch) => {
-  // in case there are any server side errors with validation, use a try/catch block
-  try {
-    // talk to the server and offer up this new spot
-    const response = await csrfFetch("/api/spots", {
-      method: "POST",
-      body: JSON.stringify(spotDetails),
+  // Create a new spot
+  export const createSpotThunk = (spotData) => async (dispatch) => {
+    const response = await csrfFetch('/api/spots', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(spotData),
     });
-    const newSpot = await response.json();
-    // dispatch an action to update our redux store
-    dispatch(addNewSpot(newSpot));
-    // return the spot back to the SpotForm component from where we submitted this request
-    return newSpot;
-  } catch (response) {
-    const errorResponse = response.json();
-    // return the error response back to the SpotForm component from where we submitted this request
-    return errorResponse;
-  }
-};
-
-export const editASpotThunk = (spotId, spotDetails) => async (dispatch) => {
-  try {
-    const response = await csrfFetch(`/api/spots/${spotId}`, {
-      method: "PUT",
-      body: JSON.stringify(spotDetails),
-    });
-    const updatedSpot = await response.json();
-    dispatch(editASpot(updatedSpot));
-    return updatedSpot;
-  } catch (response) {
-    const errorResponse = await response.json();
-    return errorResponse;
-  }
-};
-
-export const deleteASpotThunk = (spotId) => async (dispatch) => {
-  try {
-    const response = await csrfFetch(`/api/spots/${spotId}`, {
-      method: "DELETE",
-    });
-
-    const confirmation = await response.json();
-
-    dispatch(deleteASpot(spotId));
-
-    return confirmation;
-  } catch (response) {
-    const errorResponse = await response.json();
-    errorResponse.error = "We were unable to delete this spot";
-    return errorResponse;
-  }
-};
-
-export const addImageToSpotThunk = (spotId, imageData) => async (dispatch) => {
-  try {
-    const response = await csrfFetch(`/api/spots/${spotId}/images`, {
-      method: "POST",
-      body: JSON.stringify(imageData),
-    });
-    const newImage = await response.json();
-    dispatch(addSpotImage(spotId, newImage));
-    return newImage;
-  } catch (response) {
-    const errorResponse = await response.json();
-    return errorResponse;
-  }
-};
-
-export const deleteSpotImageThunk = (spotId, imageData) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spot-images/${imageData.id}`, {
-    method: "DELETE",
+  
+    if (response.ok) {
+      const newSpot = await response.json();
+      dispatch(createSpotAction(newSpot)); // Add to state
+      dispatch(getSpotsThunk()); // Optionally re-fetch all spots
+      return newSpot;
+    } else {
+      const errors = await response.json();
+      return errors;
+    }
+  };  
+// export const createSpotThunk = (spotData) => async (dispatch) => {
+//   const response = await csrfFetch('/api/spots', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(spotData)
+//   });
+//   if (response.ok) {
+//     const newSpot = await response.json();
+//     dispatch(createSpotAction(newSpot)); // Dispatch action to add spot to store
+//     return newSpot; // Return the new spot so you can navigate to it
+//   } else {
+//     const errors = await response.json();
+//     return errors; // Handle errors if needed
+//   }
+// };
+//   if (response.ok) {
+//     const newSpot = await response.json();
+//     dispatch(createSpotAction(newSpot));
+//     return newSpot;
+//   }
+// };
+// Update a spot
+export const updateSpotThunk = (spotId, spotData) => async (dispatch) => {
+  console.log(spotId, spotData)
+  const response = await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(spotData),
   });
-  const parsedResponse = await response.json();
-  dispatch(deleteSpotImage(spotId, imageData));
-  return parsedResponse;
-};
 
-const initialState = {
-  spotsArray: [],
-  spotsFlattened: {},
-  currentSpotDetails: {},
-};
-const spotsReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case GET_ALL_SPOTS: {
-      const spotsObj = {};
-      action.spotsArr.forEach((spot) => {
-        spotsObj[spot.id] = spot;
-      });
-
-      const newState = {
-        ...state,
-        spotsArray: sortByMostRecent(action.spotsArr),
-        spotsFlattened: spotsObj,
-      };
-
-      return newState;
-    }
-
-    case GET_SPOT_DETAILS: {
-      const newState = { ...state };
-      const newCurrentSpotDetails = action.spotDetails;
-      newState.currentSpotDetails = newCurrentSpotDetails;
-      return newState;
-    }
-
-    case GET_ALL_SPOTS_BY_USER: {
-      const spotsObj = {};
-      action.spotsArr.forEach((spot) => {
-        spotsObj[spot.id] = spot;
-      });
-      const newState = {
-        ...state,
-        spotsArray: sortByMostRecent(action.spotsArr),
-        spotsFlattened: spotsObj,
-      };
-      return newState;
-    }
-
-    case ADD_NEW_SPOT: {
-      const newState = { ...state }; // whatever the state is currently; this can be impacted by refreshing and by navigating to different pages that dispatch different thunks/actions on mount
-      // the new spot won't have all the same data that the others do.  The route GET api/spots returns previewImage and avgRating properties that the POST api/spots does not.
-      newState.spotsArray = sortByMostRecent([
-        action.newSpot,
-        ...newState.spotsArray,
-      ]);
-      newState.spotsFlattened = {
-        ...newState.spotsFlattened,
-        [action.newSpot.id]: action.newSpot,
-      };
-
-      newState.currentSpotDetails = action.newSpot;
-
-      return newState;
-    }
-
-    case EDIT_A_SPOT: {
-      const newState = { ...state };
-      // copy the array of spots that we just copied into newState
-      const updatedSpots = newState.spotsArray.slice();
-      // perform mutations on the copy only
-      const indexOfUpdatedSpot = updatedSpots.findIndex(
-        (spot) => spot.id === action.updatedSpot.id
-      );
-      updatedSpots.splice(indexOfUpdatedSpot, 1);
-      // reassign the newState's spotsArray to be the copied array after splicing out the one we're updating
-      newState.spotsArray = sortByMostRecent([
-        action.updatedSpot,
-        ...updatedSpots,
-      ]);
-      // reassign the spotsFlattened to a copy of itself but with the newly updated spot replacing the one that was there
-      newState.spotsFlattened = {
-        ...newState.spotsFlattened,
-        [action.updatedSpot.id]: action.updatedSpot,
-      };
-
-      return newState;
-    }
-
-    case DELETE_A_SPOT: {
-      const newState = { ...state };
-      // reassign newState.spotsArray
-      const newSpotsArray = newState.spotsArray.filter(
-        (spot) => spot.id !== action.deletedSpotId
-      );
-      newState.spotsArray = sortByMostRecent(newSpotsArray);
-      // now reassign newState.spotsFlattened
-      const newSpotsFlattened = { ...newState.spotsFlattened };
-      delete newSpotsFlattened[action.deletedSpotId];
-      newState.spotsFlattened = newSpotsFlattened;
-
-      newState.currentSpotDetails = {}; // for testing, so that I could see a page go blank if I deleted a spot by dispatch a delete action directly through the window.store.spotActions.deleteASpot(spotId)
-
-      return newState;
-    }
-
-    case ADD_SPOT_IMAGE: {
-      const newState = { ...state };
-      const { spotId, newImage } = action.imageData;
-      if (newImage.preview) {
-        // then reassign newState.spotsArray to a new array where this image's url is at the correct spot as its previewImage
-        const newSpotsArray = newState.spotsArray.map((spotObj) => {
-          // replace the previewImage on the one whose id matches the action's id
-          if (spotObj.id === spotId) {
-            spotObj = { ...spotObj, previewImage: newImage.url };
-          }
-          // then return all of the spot objects, so we don't leave out any spots in the array we're assigning to newState.spotsArray
-          return spotObj;
-        });
-
-        newState.spotsArray = sortByMostRecent(newSpotsArray);
-
-        // update the spotsFlattened to reflect the correct previewImage since this newly added image is the preview
-        newState.spotsFlattened = {
-          ...newState.spotsFlattened,
-          [spotId]: {
-            ...newState.spotsFlattened[spotId],
-            previewImage: newImage.url,
-          },
-        };
-      }
-
-      // update the state of spots
-      return newState;
-    }
-
-    case DELETE_SPOT_IMAGE: {
-      // shallow copy the state object
-      const newState = { ...state };
-      // pull out the values from the action object
-      const { spotId, deletedImage } = action.imageData;
-      // if the image we're deleting is the preview image for any one of the objects in newState.spotsArray
-      if (deletedImage.preview) {
-        // we know we need to reassign newState.spotsArray to a new array
-        const newSpotsArray = newState.spotsArray.map((spotObj) => {
-          if (spotObj.id === spotId) {
-            spotObj = { ...spotObj, previewImage: null };
-          }
-
-          return spotObj;
-        });
-
-        newState.spotsArray = sortByMostRecent(newSpotsArray);
-
-        // now reassign the spotsFlattened to a new object
-        newState.spotsFlattened = {
-          ...newState.spotsFlattened,
-          [spotId]: {
-            ...newState.spotsFlattened[spotId],
-            previewImage: null,
-          },
-        };
-      }
-
-      // tell redux about the newly deleted image on the currentSpotDetails; for ALL deleted images, not just preview images
-
-      const newSpotImages = [...newState.currentSpotDetails.SpotImages]; // this is guaranteed to be here because the spots/spotId/edit page is the only path that could lead to this thunk being called.  That page sets the currentSpotDetails to the spot being edited.  guarnateed to have at least 1 image, as the preview image.
-      // find the index of the image that was deleted.
-      const indexOfDeletedImage = newSpotImages.findIndex(
-        (spotImage) => spotImage.id === deletedImage.id
-      );
-
-      // splice that index out of the newSpotImages array, understanding .splice() returns an array of the deleted item(s).
-      // splice will mutate newSpotImages.  So we don't need to capture the return value.
-      newSpotImages.splice(indexOfDeletedImage, 1);
-
-      // now, reassign the value of newState.currentSpotDetails.SpotImages to be the new reference we made (which doesn't include the deleted image object)
-      newState.currentSpotDetails.SpotImages = newSpotImages;
-
-      return newState;
-    }
-
-    default:
-      return state;
+  if (response.ok) {
+      const updatedSpot = await response.json();
+      dispatch(updateSpotAction(updatedSpot));
+      return updatedSpot; // Optionally return updated spot
+  } else {
+      const errors = await response.json();
+      return errors; // Handle errors if needed
   }
 };
 
+// Delete a spot
+export const deleteSpotThunk = (spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'DELETE',
+  });
+
+  if (response.ok) {
+      dispatch(deleteSpotAction(spotId));
+  } else {
+      const errors = await response.json();
+      return errors; // Handle errors if needed
+  }
+};
+
+  // Initial State
+  const initialState ={
+    allSpots: {},
+    singleSpot: {},
+    spotsOwnedByCurrentUser:{}
+  }
+
+  // Reducer
+
+  const spotsReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case GET_SPOTS: {
+            const newState = { ...state, allSpots: { ...state.allSpots } };
+            action.payload.forEach((spot) => {        //payload
+                newState.allSpots[spot.id] = spot;
+            });
+            return newState;
+        }
+        case LOAD_SPOT: {
+          return {
+              ...state,
+              singleSpot: action.payload,
+          };
+    }
+    case CREATE_SPOT: {
+      const newState = { 
+        ...state, 
+        allSpots: { ...state.allSpots, [action.payload.id]: action.payload }, 
+        singleSpot: action.payload // Optionally update singleSpot to the new spot
+      };
+      return newState;
+    }
+  // case CREATE_SPOT: {
+  //   const newState = { ...state };
+  //   newState.allSpots[action.payload.id] = action.payload;
+  //   return newState;
+  // }
+  case GET_OWNED_SPOTS:{
+    const newState = { ...state };
+    newState.spotsOwnedByCurrentUser = {};
+    action.payload.forEach((spot) => {
+      newState.spotsOwnedByCurrentUser[spot.id] = spot;
+    });
+    return newState;
+  }
+case UPDATE_SPOT: {
+    const newState = { ...state };
+    newState.allSpots[action.payload.id] = action.payload; // Update the spot in the state
+    return newState;
+}
+case DELETE_SPOT: {
+    const newState = { ...state };
+    delete newState.allSpots[action.payload]; // Remove the spot from the state
+    return newState;
+}
+    default:
+        return state;
+}
+};
 export default spotsReducer;

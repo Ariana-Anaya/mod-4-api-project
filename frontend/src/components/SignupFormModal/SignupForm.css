@@ -1,0 +1,54 @@
+.signup-modal {
+    padding: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    max-height: 400px; 
+    overflow-y: auto;
+}
+
+.signup-form h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 15px; 
+}
+
+.signup-form label {
+    font-size: 14px;
+    width: 100%;
+    margin-top: 8px; 
+}
+
+.signup-form input {
+    width: 100%;
+    padding: 8px; 
+    box-sizing: border-box;
+    margin-top: 4px;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 8px; 
+    border: none;
+    background-color: #355E3B;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.signup-btn:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+.signup-btn:hover:enabled {
+    background-color: #A3B18A;
+}
+
+.error {
+    color: #ff5a5f;
+    font-size: 12px;
+    margin-top: 8px;
+}

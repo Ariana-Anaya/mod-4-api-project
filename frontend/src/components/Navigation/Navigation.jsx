@@ -1,38 +1,35 @@
-import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
-import Logo from "../Logo";
-import ProfileButton from "../ProfileButton";
-import "./Navigation.css";
-
+import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import ProfileButton from './ProfileButton';
+import './Navigation.css';
+import { GiAnteater } from "react-icons/gi";
+import './ProfileButton.css'
 function Navigation({ isLoaded }) {
-  const sessionUser = useSelector((state) => state.session.user);
+    const sessionUser = useSelector(state => state.session.user);
 
-  return (
-    <nav className="nav-bar flex-container">
-      <ul className="nav-list-container flex-container">
-        <li>
-          <NavLink to="/">{<Logo />}</NavLink>
-        </li>
-
-        {isLoaded && (
-          <li>
-            <ul className="flex-container logged-in-nav-list">
-              {sessionUser && (
+    return (
+        <div>
+            <div className='logo-container' onClick={() => window.location.href= '/'}>
+            <GiAnteater style={{ color: "F1E9DC" }} />
+            <span className='brown-logo-text'>AArdvark</span>Abodes
+      </div>
+        <nav>
+            <ul>
                 <li>
-                  <NavLink to="/spots/new" className="create-spot">
-                    Create a New Spot
-                  </NavLink>
+                    <NavLink to="/">Home</NavLink>
                 </li>
-              )}
-              <li>
-                <ProfileButton user={sessionUser} />
-              </li>
-            </ul>{" "}
-          </li>
-        )}
-      </ul>
-    </nav>
-  );
+                <ul className="header-right">
+            {}
+                {isLoaded && (
+                    <li>
+                        <ProfileButton user={sessionUser} />
+                    </li>
+                )}
+            </ul>
+            </ul>
+        </nav>
+        </div>
+    );
 }
 
 export default Navigation;

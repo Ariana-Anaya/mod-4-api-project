@@ -1,56 +1,65 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { restoreUser } from "./store/session";
-import Navigation from "./components/Navigation";
-import HomePage from "./components/HomePage";
-import SpotDetailsPage from "./components/SpotDetailsPage";
-import CreateASpotPage from "./components/CreateASpotPage";
-import EditASpotPage from "./components/EditASpotPage";
-import ManageSpotsPage from "./components/ManageSpotsPage";
-
-const Layout = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import Navigation from './components/Navigation/Navigation';
+import * as sessionActions from './store/session';
+import Spots from './components/Spots/spots';
+import LoadSpot from './components/Spots/LoadSpot';
+import CreateSpot from './components/Spots/CreateSpot';
+import ManageSpots from './components/Spots/ManageSpots';
+import UpdateSpot from './components/Spots/UpdateSpot';
+function Layout() {
   const dispatch = useDispatch();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    dispatch(restoreUser()).then(() => {
-      setIsLoaded(true);
+    dispatch(sessionActions.restoreUser()).then(() => {
+      setIsLoaded(true)
     });
   }, [dispatch]);
 
   return (
     <>
-      <header>
-        <Navigation isLoaded={isLoaded} />{" "}
-      </header>
-      {isLoaded && (
-        <main className="main-container">
-          <Outlet />
-        </main>
-      )}
+      <Navigation isLoaded={isLoaded} />
+      {isLoaded && <Outlet />}
     </>
   );
-};
+}
 
 const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
-      { path: "/", element: <HomePage /> },
       {
-        path: "/spots",
-        children: [
-          { path: ":spotId", element: <SpotDetailsPage /> },
-          { path: ":spotId/edit", element: <EditASpotPage /> },
-          { path: "new", element: <CreateASpotPage /> },
-          { path: "current", element: <ManageSpotsPage /> },
-        ],
+        path: '/',
+        element: (
+          <> <h1></h1>
+                <Spots/>
+                </>
+        )
       },
-      
-      { path: "/*", element: <h1>Not Found</h1> },
-    ],
-  },
+      {
+        path: '/spots',
+        element: <Spots/>
+      },
+      {
+        path: '/spots/:spotId',
+        element: <LoadSpot/>
+      },
+      {
+        path: '/spots/new',
+        element: <CreateSpot/>
+      },
+      {
+        path:'/spots/current',
+        element:<ManageSpots/>
+      },
+      {
+        path:'/spots/:spotId/edit',
+        element:<UpdateSpot/>
+      }
+    ]
+  }
 ]);
 
 function App() {

@@ -1,0 +1,206 @@
+
+   .reviews-section {
+    margin-top: 40px;
+    font-family: Arial, sans-serif;
+}
+
+.reviews-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reviews-header h2 {
+    font-size: 22px;
+    margin-right: 15px;
+}
+
+.post-review-button {
+    background-color: #7A8F5A;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px; 
+}
+
+.no-reviews-text {
+    color: #717171;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px; 
+}
+
+.review-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+}
+
+.review-modal h3 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.review-modal textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.star-rating {
+    margin-bottom: 15px;
+}
+
+.star {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star.filled {
+    color: #FFD700;
+}
+
+.review-modal button {
+    background-color: #7A8F5A;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.review-modal button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.review {
+    border-top: 1px solid #ebebeb;
+    padding: 20px 0;
+}
+
+.review h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.review p {
+    margin: 5px 0;
+    color: #717171;
+}
+
+.review p:nth-child(2) {
+    font-size: 14px;
+}
+
+.delete-review-button {
+    background-color: #FF5A5F;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.error {
+    color: #FF5A5F;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .review-modal {
+        width: 95%;
+    }
+}
+
+.delete-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.delete-container h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.delete-container h4 {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.confirm-delete-button {
+    background-color: #FF5A5F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.cancel-delete-button {
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.confirm-delete-button:hover {
+    background-color: #ff787d;
+}
+
+.cancel-delete-button:hover {
+    background-color: #bbb;
+}
+
+/* Added Styles */
+.review-modal h3 {
+    font-weight: bold;
+    text-align: center;
+}
+
+.star-rating span {
+    padding-right: 8px; 
+}
+
+.reviews-section h2 {
+    font-size: 24px; 
+    margin-bottom: 25px;
+}
+
+.review p {
+    line-height: 1.6; 
+}
